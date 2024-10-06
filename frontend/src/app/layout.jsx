@@ -1,14 +1,15 @@
 import localFont from "next/font/local";
+import { paperlogy, uhBeeZziba } from "@/fonts";
 import "@/styles/globals.css";
 
-const wantedSans = localFont({
-    src: "../fonts/WantedSansVariable.woff2",
-    preload: true,
-    style: "normal",
-    display: "swap",
-    weight: "400 1000",
-    variable: "--font-wanted-sans",
-});
+// const wantedSans = localFont({
+//     src: "../fonts/WantedSansVariable.woff2",
+//     preload: true,
+//     style: "normal",
+//     display: "swap",
+//     weight: "400 1000",
+//     variable: "--font-wanted-sans",
+// });
 
 export const metadata = {
     title: "Managers",
@@ -18,7 +19,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
     return (
         <html lang="ko">
-            <body className={`${wantedSans.variable}`}>
+            <body className={`${paperlogy.variable} ${uhBeeZziba.variable}`}>
                 {children}
             </body>
         </html>
