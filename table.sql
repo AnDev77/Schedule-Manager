@@ -8,7 +8,7 @@ CREATE TABLE users (
 
 );
 
-
+  
 CREATE TABLE teams (
 
 id INT AUTO_INCREMENT PRIMARY KEY,
