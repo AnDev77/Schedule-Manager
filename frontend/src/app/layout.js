@@ -1,8 +1,8 @@
 import localFont from "next/font/local";
-import "./globals.css";
+import "@/styles/globals.css";
 
 const wantedSans = localFont({
-  src: "./fonts/WantedSansVariable.woff2",
+  src: "../fonts/WantedSansVariable.woff2",
   preload: true,
   style: "normal",
   display: "swap",
