@@ -1,0 +1,10 @@
+.inputBox {
+    width: 100%;
+    margin: 0;
+    padding: 0.75rem;
+    font-size: 1.5rem;
+    border: 0.125rem dashed var(--color-neutral);
+    border-bottom: 0.1875rem solid var(--color-text);
+    font-family: var(--font-paperlogy);
+    font-weight: 500;
+}
