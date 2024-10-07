@@ -5,15 +5,22 @@ import BigButton from '@/components/common/big-button';
 import Title from '@/components/common/title';
 import styles from '@/styles/pages/login.module.css';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const Register = () => {
     // TODO: 회원가입 페이지 구현
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
     const [passwordCheck, setPasswordCheck] = useState('');
+    const router = useRouter();
         
     const handleClick = (e) => {
-        alert(`Id: ${id}, PW: ${password}, PW 확인: ${passwordCheck}`)
+        if(password === passwordCheck) {
+            alert('회원가입이 완료되었습니다.');
+            router.push('/login');
+        } else {
+            alert('비밀번호가 다릅니다.');
+        }
     }
 
     return (

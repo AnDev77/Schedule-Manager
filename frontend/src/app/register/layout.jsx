@@ -4,7 +4,7 @@ export const metadata = {
     title: 'register | Schedule Manager'
 }
 
-export default function LoginLayout({ children }) {
+export default function RegisterLayout({ children }) {
     return (
         <UserLayout>
             {children}
