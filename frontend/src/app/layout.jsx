@@ -3,7 +3,7 @@ import { paperlogy, uhBeeZziba } from "@/fonts";
 import "@/styles/globals.css";
 
 export const metadata = {
-    title: "Managers",
+    title: "Schedule Manager",
     description: "일정 관리 프로젝트",
 };
 
