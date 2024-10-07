@@ -1,4 +1,3 @@
-import localFont from "next/font/local";
 import { paperlogy, uhBeeZziba } from "@/fonts";
 import "@/styles/globals.css";
 
