@@ -12,6 +12,7 @@ const BigButton = ({
             type={type}
             onClick={onClick}
             className={`${styles.bigButton} ${className}`}
+            {...props}
         >
             {children}
         </button>
