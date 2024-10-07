@@ -20,6 +20,6 @@ const InputBox = ({
     );
 };
 
-InputBox.dipslayName = 'Input';
+InputBox.dipslayName = 'InputBox';
 
 export default InputBox;
