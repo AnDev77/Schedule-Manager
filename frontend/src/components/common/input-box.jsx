@@ -1,4 +1,3 @@
-// TODO: 스타일링 필요
 import styles from '@/styles/common/input-box.module.css';
 
 const InputBox = ({
