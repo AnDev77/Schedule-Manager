@@ -1,6 +1,7 @@
 // TODO: 스타일링 필요
+import styles from '@/styles/common/input-box.module.css';
 
-const Input = ({
+const InputBox = ({
     type = 'text',
     placeholder = '',
     value,
@@ -14,12 +15,12 @@ const Input = ({
             placeholder={placeholder}
             value={value}
             onChange={onChange}
-            className={`${className}`}
+            className={`${styles.inputBox} ${className}`}
             {...props}
         />
     );
 };
 
-Input.dipslayName = 'Input';
+InputBox.dipslayName = 'Input';
 
-export default Input;
+export default InputBox;
