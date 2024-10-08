@@ -24,6 +24,7 @@ const Login = () => {
                 <a href="/find">아이디/비밀번호 찾기</a>
                 <a href="/register">회원가입</a>
             </div>
+            <br />
             <BigButton className={styles.loginButton} onClick={handleClick}>로그인</BigButton>
         </>
     )
