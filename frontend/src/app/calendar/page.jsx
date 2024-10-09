@@ -2,6 +2,7 @@
 
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
 import { useRouter } from 'next/navigation';
 
 const events = [
@@ -18,7 +19,7 @@ const CalendarMain = () => {
     return (
         <div>
             <FullCalendar
-                plugins={[ dayGridPlugin ]}
+                plugins={[ dayGridPlugin, interactionPlugin ]}
                 initialView='dayGridMonth'
                 events={events}
                 height={'100vh'}
@@ -42,7 +43,7 @@ const CalendarMain = () => {
                     }
                 }}
                 moreLinkText={(n) => `+${n} 더보기`}
-                eventClick={({ event }) => router.push(`/calendar/${event.id}`)}
+                dateClick={(arg) => { router.push(`/calendar/${arg.dateStr}`) }}
                 dayMaxEvents
                 nowIndicator
             />
