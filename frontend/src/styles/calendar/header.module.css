@@ -23,5 +23,12 @@
 
 .icons {
     height: 2rem;
+    color: var(--color-neutral);
     cursor: pointer;
+    transition: color ease 0.2s;
+    
+}
+
+.icons:hover {
+    color: black;
 }
