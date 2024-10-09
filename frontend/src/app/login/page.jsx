@@ -5,28 +5,40 @@ import BigButton from '@/components/common/big-button';
 import Title from '@/components/common/title';
 import styles from '@/styles/pages/login.module.css';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form'
 
 const Login = () => {
     // TODO: 로그인 페이지 구현
-    const [id, setId] = useState('');
-    const [password, setPassword] = useState('');
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors },
+    } = useForm();
 
-    const handleClick = (e) => {
-        alert(`ID: ${id}, PW: ${password}`)
+    const onSubmit = (data) => {
+        alert(`${JSON.stringify(data, null, 4)}`)
     }
 
     return (
-        <>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <Title>Schedule<br />Manager</Title>
-            <InputBox placeholder='ID' value={id} onChange={(e) => setId(e.target.value)} />
-            <InputBox type='password' placeholder='PASSWORD' value={password} onChange={(e) => setPassword(e.target.value)} />
+            <InputBox
+                {...register('id', { required: true })}
+                placeholder='ID'
+            />
+            <InputBox
+                {...register('password', { required: true })}
+                type='password'
+                placeholder='PASSWORD'
+            />
             <div className={styles.links}>
                 <a href="/find">아이디/비밀번호 찾기</a>
                 <a href="/register">회원가입</a>
             </div>
             <br />
-            <BigButton className={styles.loginButton} onClick={handleClick}>로그인</BigButton>
-        </>
+            <BigButton type='submit' className={styles.loginButton}>로그인</BigButton>
+        </form>
     )
 }
 
