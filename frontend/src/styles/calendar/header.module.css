@@ -1,0 +1,27 @@
+.div {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f2f2f2;
+    padding: 0.5rem 1rem;
+}
+
+.main {
+    padding: 1rem;
+    flex: 1;
+}
+
+.title {
+    font-family: var(--font-uhbee-zziba)
+}
+
+.icons {
+    height: 2rem;
+    cursor: pointer;
+}
