@@ -1,7 +1,7 @@
 import styles from '@/styles/common/schedule-input-box.module.css';
 
 import RemoveList from '@heroicons/react/24/solid/MinusCircleIcon';
-import UserPlus from '@heroicons/react/24/solid/UserplusIcon';
+import UserPlus from '@heroicons/react/24/solid/UserPlusIcon';
 
 const ScheduleInputBox = ({
     type = 'text',
