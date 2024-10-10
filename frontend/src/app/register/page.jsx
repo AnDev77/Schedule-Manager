@@ -6,6 +6,7 @@ import Title from '@/components/common/title';
 import styles from '@/styles/pages/login.module.css';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
 
 const Register = () => {
     // TODO: 회원가입 페이지 구현
@@ -13,25 +14,41 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const [passwordCheck, setPasswordCheck] = useState('');
     const router = useRouter();
-        
-    const handleClick = (e) => {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm();
+
+    const onSubmit = (data) => {
+        if (data.password != data.passwordCheck)
         if(password === passwordCheck) {
-            alert('회원가입이 완료되었습니다.');
-            router.push('/login');
-        } else {
             alert('비밀번호가 다릅니다.');
+            return;
         }
+        alert(`${JSON.stringify(data, null, 4)}`)
     }
 
     return (
-        <>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <Title>Schedule<br/>Manager</Title>
-            <InputBox placeholder='ID' value={id} onChange={(e) => setId(e.target.value)} />
-            <InputBox type='password' placeholder='PASSWORD' value={password} onChange={(e) => setPassword(e.target.value)} />
-            <InputBox type='password' placeholder='PASSWORD 확인' value={passwordCheck} onChange={(e) => setPasswordCheck(e.target.value)} />
+            <InputBox
+                {...register('id', { required: true })}
+                placeholder='ID'
+            />
+            <InputBox
+                {...register('password', { required: true })}
+                type='password'
+                placeholder='PASSWORD'
+            />
+            <InputBox
+                {...register('passwordCheck', { required: true })}
+                type='password'
+                placeholder='PASSWORD 확인'
+            />
             <br/>
-            <BigButton className={styles.loginButton} onClick={handleClick}>회원가입</BigButton>
-        </>
+            <BigButton type='submit' className={styles.loginButton}>회원가입</BigButton>
+        </form>
     )
 }
 
