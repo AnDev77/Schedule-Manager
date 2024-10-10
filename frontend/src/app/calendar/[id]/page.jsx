@@ -3,12 +3,13 @@
 import ScheduleInputBox from '@/components/common/schedule-input-box';
 import styles from '@/styles/pages/id.module.css';
 import PlusCircle from '@heroicons/react/24/solid/PlusCircleIcon';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
 const CalenderDetail = () => {
     // TODO: 일정 보기/수정/삭제 페이지 구현
     const router = useRouter();
+    const params = useParams();
     const [id, setId] = useState(5);
     const [events, setEvents] = useState([
         { id: 1, title: 'Meeting1', start: new Date(), allDay: true, },
@@ -16,7 +17,9 @@ const CalenderDetail = () => {
         { id: 3, title: 'Meeting3', start: new Date(), allDay: true, },
         { id: 4, title: 'Meeting4', start: new Date(), allDay: true, },
     ]);
-
+    
+    const day = params.id.split('-');
+    const viewDay = `${day[0]}년 ${day[1]}월 ${day[2]}일`;
 
     const handleClick = (e) => {
         router.push('/calendar');
@@ -56,7 +59,7 @@ const CalenderDetail = () => {
     return (
         <>
             <div className={styles.topDiv}>
-                <h2>2024년 10월 00일</h2>
+                <h2>{viewDay}</h2>
                 <button className={styles.button} onClick={handleClick}>돌아가기</button>
             </div>
             <div className={styles.mainDiv}>
