@@ -10,3 +10,14 @@
     padding: 0 0.25rem;
     font-weight: 500;
 }
+
+.inputContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.inputContainer p {
+    color: red;
+}
