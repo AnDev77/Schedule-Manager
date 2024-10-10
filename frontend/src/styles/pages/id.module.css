@@ -17,7 +17,7 @@
     border: 1px solid transparent;
     border-radius: 0.25em;
     display: inline-block;
-    font-size: 1em;
+    font-size: 1.045em;
     font-weight: 400;
     line-height: 1.5;
     padding: 0.4em 0.65em;
@@ -30,6 +30,10 @@
 .button:hover {
     background-color: #1e2b37;
     border-color: #1e2b37;
+}
+
+.button:focus {
+    box-shadow: rgba(76, 91, 106, 0.5) 0px 0px 0px 0.2rem;
 }
 
 .icons {
