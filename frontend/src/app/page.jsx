@@ -3,10 +3,11 @@
 import useUser from '@/data/use-user';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import LoadingSpinner from '@/components/common/loading-spinner';
 
 export default function Home() {
     const router = useRouter();
-    const { loggedOut, error } = useUser();
+    const { loading, loggedOut, error } = useUser();
 
     useEffect(() => {
         if (loggedOut) {
@@ -16,5 +17,5 @@ export default function Home() {
         }
     }, [router, loggedOut, error]);
 
-    return null;
+    return <LoadingSpinner />;
 }
