@@ -4,15 +4,11 @@ import InputBox from '@/components/common/input-box';
 import BigButton from '@/components/common/big-button';
 import Title from '@/components/common/title';
 import styles from '@/styles/pages/login.module.css';
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 
 const Register = () => {
     // TODO: 회원가입 페이지 구현
-    const [id, setId] = useState('');
-    const [password, setPassword] = useState('');
-    const [passwordCheck, setPasswordCheck] = useState('');
     const router = useRouter();
     const {
         register,
@@ -21,12 +17,12 @@ const Register = () => {
     } = useForm();
 
     const onSubmit = (data) => {
-        if (data.password != data.passwordCheck)
-        if(password === passwordCheck) {
+        if(data.password != data.passwordCheck) {
             alert('비밀번호가 다릅니다.');
             return;
         }
-        alert(`${JSON.stringify(data, null, 4)}`)
+        alert(`${JSON.stringify(data, null, 4)}`);
+        router.push('/calendar');
     }
 
     return (
