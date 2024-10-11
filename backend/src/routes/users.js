@@ -1,14 +1,57 @@
-const express = require('express'); // express 모듈
+const express = require('express');
 const router = express.Router();
-const {join, login, idCheck, passwordReset} = require('../controller/UserController');
+const { join, login, idCheck, passwordReset, userDelete } = require('../controller/UserController');
+const {body, validationResult} = require('express-validator'); 
 router.use(express.json());
 
-router.post('/join', join); // 회원 가입
+const validate = (req, res, next) => {
+    const err = validationResult(req);
 
-router.post('/login', login); // 로그인
+    if (err.isEmpty()) {
+        return next(); 
+     } 
+    else {
+        return res.status(400).json(err.array()) 
+     }
 
-router.post('/idcheck', idCheck); // 아이디 확인
+}
 
-router.put('/reset', passwordReset); // 비밀번호 변경
+router.post('/join', 
+    [
+        body('email').notEmpty().isEmail().withMessage('이메일 형식으로 입력하세요'),
+        body('password').notEmpty().isString().withMessage('비밀번호를 입력하세요'),
+        validate
+    ],
+    join);
+
+router.post('/login', 
+    [
+        body('email').notEmpty().isEmail().withMessage('이메일 형식으로 입력하세요'),
+        body('password').notEmpty().isString().withMessage('비밀번호를 입력하세요'),
+        validate
+    ],
+    login);
+
+router.post('/idcheck',
+    [
+        body('email').notEmpty().isEmail().withMessage('이메일 형식으로 입력하세요'),
+        validate
+    ],
+    idCheck);
+
+router.put('/reset',
+    [
+        body('email').notEmpty().isEmail().withMessage('이메일 형식으로 입력하세요'),
+        body('password').notEmpty().isString().withMessage('비밀번호를 입력하세요'),
+        validate
+    ],
+     passwordReset);
+
+router.delete('/delete', 
+    [
+        body('email').notEmpty().isEmail().withMessage('이메일 형식으로 입력하세요'),
+        validate
+    ],
+    userDelete);
 
 module.exports = router
