@@ -1,0 +1,47 @@
+.div {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 0.5rem;
+}
+
+.inputDiv {
+    width: 97.5%;
+    border-bottom: 0.1875rem solid var(--color-text);
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.list {
+    height: 2.5rem;
+    color: var(--color-neutral);
+    cursor: pointer;
+    transition: color ease 0.2s;
+}
+
+.list:hover {
+    color: black;
+}
+
+.scheduleInputBox {
+    width: 97%;
+    margin: 0;
+    padding: 0.75rem;
+    font-size: 1.5rem;
+    border: none;
+    font-family: var(--font-paperlogy);
+    font-weight: 500;
+}
+
+.icons {
+    height: 3rem;
+    color: var(--color-neutral);
+    cursor: pointer;
+    transition: color ease 0.2s;
+}
+
+.icons:hover {
+    color: black;
+}
