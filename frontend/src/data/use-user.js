@@ -7,8 +7,8 @@ const getJwt = () => {
 
 const useUser = () => {
     const jwt = getJwt();
+    if (!jwt) return;
     const { id, email } = jwtDecode(jwt);
-
     return { id, email };
 }
 
