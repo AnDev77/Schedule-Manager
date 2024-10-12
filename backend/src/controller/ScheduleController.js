@@ -65,23 +65,6 @@ const deletSchedule = (req, res) =>{
 };
 
 
-
-//비 반복일정 월 초 월 말 계산 함수
-function getResult (rows, result, startDate, endDate){
-    
-    let S = new Date(startDate);
-    let E = new Date(endDate);
-    for(let i = 0; i < Object.keys(rows).length; i++){
-        let tempEnd = new Date(rows[i]['end_date']);
-        let tempStart = new Date(rows[i]['start_date']);
-        if (tempEnd > E)
-            rows[i]['end_date'] = E.toISOString().substring(0,10);
-        if (tempStart < S)
-            rows[i]['start_date'] = S.toISOString().substring(0,10);
-        result.push(rows[i]);
-    }
-}
-
 //일정 업데이트
 const updateSchedule = (req, res) =>{
     const {id} = req.params;
@@ -122,6 +105,57 @@ const updateSchedule = (req, res) =>{
     })
 
 };
+
+//일정 공유 테이블에 추가 후 이메일 전송
+const shareSchedule = (req, res) => {
+    const {id} = req.params;
+    const {user_email, invited_email, schedule_title} = req.body;
+
+    const query = `INSERT INTO scheduleMembers (schedule_id, user_id) SELECT ?, id FROM users WHERE email = ?;`
+    const values = [id, invited_email];
+
+    connection.query(query, values, (err, rows) =>{
+        if (err){
+            console.log(err);
+            return res.status(StatusCodes.BAD_REQUEST).end();
+        }
+        
+        
+        const mailOptions = {
+            from : sender,
+            to: invited_email,
+            subject: `${user_email} 님이 ${invited_email} 님을 일정에 초대했습니다.`,
+            text: `${schedule_title} 일정에 함께하세요! 캘린더를 통해서 일정 내용을 확인해주세요!`
+          };
+          
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+              console.error(error);
+            } else {
+              console.log('Email Sent : ', info);
+            }
+          })        
+
+        res.status(StatusCodes.CREATED).json(rows);
+    })
+    
+};
+
+//비 반복일정 월 초 월 말 계산 함수
+function getResult (rows, result, startDate, endDate){
+    
+    let S = new Date(startDate);
+    let E = new Date(endDate);
+    for(let i = 0; i < Object.keys(rows).length; i++){
+        let tempEnd = new Date(rows[i]['end_date']);
+        let tempStart = new Date(rows[i]['start_date']);
+        if (tempEnd > E)
+            rows[i]['end_date'] = E.toISOString().substring(0,10);
+        if (tempStart < S)
+            rows[i]['start_date'] = S.toISOString().substring(0,10);
+        result.push(rows[i]);
+    }
+}
 
 
 
@@ -194,6 +228,7 @@ module.exports = {
     getSchedules,
     addSchedule,
     deletSchedule,
-    updateSchedule
+    updateSchedule,
+    shareSchedule
 }
 
