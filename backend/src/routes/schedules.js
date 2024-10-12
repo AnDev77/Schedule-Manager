@@ -1,5 +1,18 @@
-const express = require('express'); // express 모듈
+const express = require('express');
 const router = express.Router();
-const {} = require('../controller/ScheduleController');
+const { 
+        getSchedules,
+        addSchedule,
+        deletSchedule, 
+        } = require('../controller/ScheduleController')
+
+
+router.use(express.json());
+
+router.get('/', getSchedules);
+
+router.post('/', addSchedule);
+
+router.delete('/:id', deletSchedule); 
 
 module.exports = router

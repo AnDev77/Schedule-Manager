@@ -8,26 +8,16 @@ CREATE TABLE users (
 
 );
 
-  
-CREATE TABLE teams (
 
-    id INT AUTO_INCREMENT PRIMARY KEY,
-
-    name VARCHAR(45) NOT NULL
-
-);
-
-CREATE TABLE TeamMembers (
-
-	id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE scheduleMembers (
 
 	user_id INT,
 
-	team_id INT,
+	schedule_id INT,
 
 	FOREIGN KEY (user_id) REFERENCES users(id),
 
-	FOREIGN KEY (team_id) REFERENCES teams(id)
+	FOREIGN KEY (schedule_id) REFERENCES schedule(id)
 );
 
 
@@ -35,9 +25,7 @@ CREATE TABLE schedules (
 
 	id INT AUTO_INCREMENT PRIMARY KEY,
 
-	user_id INT,
-
-	team_id INT DEFAULT NULL,
+	user_email INT,
 
 	title VARCHAR(45) NOT NULL,
 
@@ -45,17 +33,18 @@ CREATE TABLE schedules (
 
 	start_date DATE NOT NULL,
     
+	end_date DATE NOT NULL,
+    
     start_time TIME,
 	
-    end_time	TIME,
+    end_time  TIME,
 
-	end_date DATE NOT NULL,
+	repet_type INT NOT NULL,  --0 : non-repetition, 1 : weekly, 2 : montly
 
-	repeat_type ENUM('NONE', 'DAILY', 'WEEKLY', 'MONTHLY') NOT NULL,
+	FOREIGN KEY (user_email) REFERENCES users(email) ON DELETE CASCADE,
 
-	FOREIGN KEY (user_id) REFERENCES users(id),
-
-	FOREIGN KEY (team_id) REFERENCES teams(id)
+	FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE CASCADE,
+    
 );
 
 
