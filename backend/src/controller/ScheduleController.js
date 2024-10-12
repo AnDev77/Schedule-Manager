@@ -82,6 +82,48 @@ function getResult (rows, result, startDate, endDate){
     }
 }
 
+//일정 업데이트
+const updateSchedule = (req, res) =>{
+    const {id} = req.params;
+    const {start_date, end_date, start_time, end_time} = req.body;
+    let values = [];
+    let query = `UPDATE schedules `;
+    if (start_date){
+        query += `SET start_date = ? `
+        values.push(start_date)
+    }
+    if (end_date){
+        if(start_date)
+            query += `, `
+        query += `end_date = ?`
+        values.push(end_date);
+    }
+    if (start_time){
+        if (start_date || end_date)
+            query +=   `, `
+        query +=  `SET start_date = ? `
+        values.push(start_time)
+    }
+    if (end_time){
+        if (start_date || end_date || start_time)
+            query += `, `
+        query +=  `SET end_time = ? `
+        values.push(end_time)
+    }
+    query += `WHERE id = ?;`
+    values.push(id);
+    connection.query(query, values,  (err, rows)=>{
+        if (err)
+            return res.status(StatusCodes.BAD_REQUEST).end();
+        if(rows.affeckedRows == 0)
+            return res.status(StatusCodes.BAD_REQUEST).end();
+
+        res.status(StatusCodes.OK).json(rows);
+    })
+
+};
+
+
 
 //반복일정 월초 월말 계산 및 반복 날짜 생성함수
 function getRepetResult(rows, result, startDate, endDate){
@@ -151,6 +193,7 @@ function getRepetResult(rows, result, startDate, endDate){
 module.exports = {  
     getSchedules,
     addSchedule,
-    deletSchedule
+    deletSchedule,
+    updateSchedule
 }
 
