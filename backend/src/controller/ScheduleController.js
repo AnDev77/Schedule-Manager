@@ -7,41 +7,52 @@ const sender = process.env.SENDER;
 
 // 조회 기능 (반복 일정 조회 포함)
 const getSchedules = (req, res) => {
-    let { calStartDate, calEndDate, user_id } = req.body;
+    let {calStartDate, calEndDate, user_id} = req.body;
     user_id = parseInt(user_id);
+    if (!calEndDate){
+        calEndDate = new Date(calStartDate);
+        calEndDate.setDate(calEndDate.getDate() + 27)
+        while (true){
+            calEndDate.setDate(calEndDate.getDate() + 1);
+            if(calEndDate.getMonth() - calStartDate.getMonth() >= 1){
+                calEndDate.setDate(calEndDate.getDate() - 1)
+                break;
+            }
+        }
+        calEndDate = calEndDate.toISOString().substring(0, 10);
+    }
 
-    let query1 = `SELECT DISTINCT id, title, detail, start_date, end_date, repet_type 
-                  FROM schedules LEFT JOIN scheduleMembers ON schedules.id = scheduleMembers.schedule_id 
-                  WHERE (schedules.user_id = ? OR scheduleMembers.user_id = ?) 
-                  AND schedules.repet_type = 0 
+
+    let query1 = `SELECT DISTINCT id, title, start_date, end_date, repet_type FROM schedules 
+                  LEFT JOIN  scheduleMembers ON schedules.id = scheduleMembers.schedule_id 
+                  WHERE (schedules.user_id = ? OR scheduleMembers.user_id = ?) AND schedules.repet_type = 0 
                   AND ((start_date BETWEEN STR_TO_DATE(?, '%Y-%m-%d') AND STR_TO_DATE(?, '%Y-%m-%d')) 
                   OR (end_date >= STR_TO_DATE(?, '%Y-%m-%d') AND start_date < STR_TO_DATE(?, '%Y-%m-%d')));`;
-
-    let query2 = `SELECT DISTINCT id, title, detail, start_date, end_date, repet_type 
-                  FROM schedules LEFT JOIN scheduleMembers ON schedules.id = scheduleMembers.schedule_id 
-                  WHERE (schedules.user_id = ? OR scheduleMembers.user_id = ?) 
-                  AND schedules.repet_type > 0 
+    
+    let query2 = `SELECT DISTINCT id, title, start_date, end_date, repet_type FROM schedules 
+                  LEFT JOIN  scheduleMembers ON 
+                  schedules.id = scheduleMembers.schedule_id WHERE (schedules.user_id = ? 
+                  OR scheduleMembers.user_id = ?) AND schedules.repet_type > 0 
                   AND start_date <= STR_TO_DATE(?, '%Y-%m-%d');`;
-
     let result = [];
     let values = [user_id, user_id, calStartDate, calEndDate, calStartDate, calStartDate, user_id, user_id, calEndDate];
-
-    connection.query(query1 + query2, values, (err, rows) => {
-        if (err) {
+    connection.query(query1 + query2, values ,(err, rows)=>{
+        if(err){
             console.log(err);
             return res.status(StatusCodes.BAD_REQUEST).end();
         }
         getResult(rows[0], result, calStartDate, calEndDate);
         getRepetResult(rows[1], result, calStartDate, calEndDate);
-        res.status(StatusCodes.OK).json({ schedules: result });
-    });
-};
+        res.status(StatusCodes.OK).json({ schedules : result});
+
+    });    
+}
 
 // 일정 추가
 const addSchedule = (req, res) => {
     const { user_id, title, detail, start_date, end_date, repet_type } = req.body;
 
-    let query = `INSERT INTO schedules (user_id, title, detail, start_date, end_date, repet_type) 
+    let query = `INSERT INTO schedules (user_id, title, start_date, end_date, repet_type) 
                  VALUES (?, ?, ?, ?, ?, ?)`;
     let values = [user_id, title, detail, start_date, end_date, repet_type];
 
@@ -69,42 +80,50 @@ const deletSchedule = (req, res) => {
 };
 
 // 일정 업데이트
-const updateSchedule = (req, res) => {
-    const { id } = req.params;
-    const { start_date, end_date, start_time, end_time } = req.body;
+const updateSchedule = (req, res) =>{
+    const {id} = req.params;
+    const {start_date, end_date, start_time, end_time, schedule_title} = req.body;
     let values = [];
-    let query = `UPDATE schedules SET `;
-
-    if (start_date) {
-        query += `start_date = ? `;
-        values.push(start_date);
+    let query = `UPDATE schedules `;
+    if(schedule_title){
+        query += `SET schedule_title = ? `
+        values.push(start_date)
     }
-    if (end_date) {
-        if (start_date) query += `, `;
-        query += `end_date = ? `;
+    if (start_date){
+        if(schedule_title)
+            query += ', '
+        query += `SET start_date = ? `
+        values.push(start_date)
+    }
+    if (end_date){
+        if(start_date || schedule_title)
+            query += `, `
+        query += `end_date = ?`
         values.push(end_date);
     }
-    if (start_time) {
-        if (start_date || end_date) query += `, `;
-        query += `start_time = ? `;
-        values.push(start_time);
+    if (start_time){
+        if (start_date || end_date || schedule_title)
+            query +=   `, `
+        query +=  `SET start_date = ? `
+        values.push(start_time)
     }
-    if (end_time) {
-        if (start_date || end_date || start_time) query += `, `;
-        query += `end_time = ? `;
-        values.push(end_time);
+    if (end_time){
+        if (start_date || end_date || start_time || schedule_title)
+            query += `, `
+        query +=  `SET end_time = ? `
+        values.push(end_time)
     }
-    query += `WHERE id = ?;`;
+    query += `WHERE id = ?;`
     values.push(id);
-
-    connection.query(query, values, (err, rows) => {
+    connection.query(query, values,  (err, rows)=>{
         if (err)
             return res.status(StatusCodes.BAD_REQUEST).end();
-        if (rows.affectedRows === 0)
+        if(rows.affeckedRows == 0)
             return res.status(StatusCodes.BAD_REQUEST).end();
 
         res.status(StatusCodes.OK).json(rows);
-    });
+    })
+
 };
 
 // 일정 공유 테이블에 추가 후 이메일 전송
