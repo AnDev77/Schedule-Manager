@@ -26,12 +26,12 @@ const Find = () => {
             credentials: 'include',
         });
 
-        if (response.status == 400) {
+        if (resp.status == 400) {
             alert('오류가 발생하였습니다.');
             return;
         }
 
-        if (response.status == 401) {
+        if (resp.status == 401) {
             alert('존재하지 않는 계정입니다.');
             return;
         }
