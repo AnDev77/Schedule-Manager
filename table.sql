@@ -25,11 +25,9 @@ CREATE TABLE schedules (
 
 	id INT AUTO_INCREMENT PRIMARY KEY,
 
-	user_email INT,
+	user_id INT,
 
 	title VARCHAR(45) NOT NULL,
-
-	detail TEXT,
 
 	start_date DATE NOT NULL,
     

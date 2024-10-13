@@ -64,24 +64,6 @@ const deletSchedule = (req, res) =>{
 
 };
 
-
-
-//비 반복일정 월 초 월 말 계산 함수
-function getResult (rows, result, startDate, endDate){
-    
-    let S = new Date(startDate);
-    let E = new Date(endDate);
-    for(let i = 0; i < Object.keys(rows).length; i++){
-        let tempEnd = new Date(rows[i]['end_date']);
-        let tempStart = new Date(rows[i]['start_date']);
-        if (tempEnd > E)
-            rows[i]['end_date'] = E.toISOString().substring(0,10);
-        if (tempStart < S)
-            rows[i]['start_date'] = S.toISOString().substring(0,10);
-        result.push(rows[i]);
-    }
-}
-
 //일정 업데이트
 const updateSchedule = (req, res) =>{
     const {id} = req.params;
@@ -123,7 +105,21 @@ const updateSchedule = (req, res) =>{
 
 };
 
-
+//비 반복일정 월 초 월 말 계산 함수
+function getResult (rows, result, startDate, endDate){
+    
+    let S = new Date(startDate);
+    let E = new Date(endDate);
+    for(let i = 0; i < Object.keys(rows).length; i++){
+        let tempEnd = new Date(rows[i]['end_date']);
+        let tempStart = new Date(rows[i]['start_date']);
+        if (tempEnd > E)
+            rows[i]['end_date'] = E.toISOString().substring(0,10);
+        if (tempStart < S)
+            rows[i]['start_date'] = S.toISOString().substring(0,10);
+        result.push(rows[i]);
+    }
+}
 
 //반복일정 월초 월말 계산 및 반복 날짜 생성함수
 function getRepetResult(rows, result, startDate, endDate){
