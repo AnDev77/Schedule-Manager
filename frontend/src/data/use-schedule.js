@@ -2,6 +2,10 @@ import { createUrlWithParams } from '@/libs/url';
 import useSWR from 'swr';
 
 const fetcher = async ([url, startDate, endDate, userId]) => {
+    if (!startDate || !userId) {
+        return null;
+    }
+
     const urlWithParams = createUrlWithParams(url, {
         calStartDate: startDate,
         calEndDate: endDate,
@@ -17,8 +21,9 @@ const fetcher = async ([url, startDate, endDate, userId]) => {
 }
 
 const useSchedule = (req) => {
-    const { startDate, endDate, userId } = req;
-    const { data, error, isLoading } = useSWR(['http://localhost:3000/schedules', startDate, endDate, userId], fetcher);
+    const { startDate, endDate, userId } = req || {};
+    const shouldFetch = startDate && userId;
+    const { data, error, isLoading } = useSWR([shouldFetch ? 'http://localhost:3000/schedules' : null, startDate, endDate, userId], fetcher);
 
     return {
         data,
