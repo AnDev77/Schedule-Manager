@@ -1,18 +1,15 @@
-import useSWR from 'swr';
-import apiFetcher from '@/libs/api-fetcher';
+import { jwtDecode } from 'jwt-decode';
+
+const getJwt = () => {
+    const match = document.cookie.match(/(?:^|;)\s*token=([^;]*)/);
+    return match ? decodeURIComponent(match[1]) : null;
+}
 
 const useUser = () => {
-    const { data, mutate, error } = useSWR('/users', apiFetcher);
+    const jwt = getJwt();
+    if (!jwt) return;
+    const { id, email } = jwtDecode(jwt);
+    return { id, email };
+}
 
-    const loading = !data && !error;
-    const loggedOut = error && error.status != 200;
-
-    return {
-        loading,
-        loggedOut,
-        user: data,
-        mutate
-    };
-};
-
-export default useUser;
+export { useUser };

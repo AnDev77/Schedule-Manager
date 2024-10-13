@@ -1,19 +1,21 @@
-'use server'
+'use client'
 
 import LoadingSpinner from '@/components/common/loading-spinner';
-import { redirect } from 'next/navigation';
-import { getJwt } from '@/libs/jwt';
+import { useRouter } from 'next/navigation';
+import { useUser } from '@/data/use-user';
+import { useEffect } from 'react';
 
-export default async function Home() {
-    const jwt = await getJwt();
-
-    console.log(jwt);
+export default function Home() {
+    const router = useRouter();
+    const user = useUser();
     
-    if (jwt) {
-        redirect('/calendar');
-    } else {
-        redirect('/login');
-    }
+    useEffect(() => {
+        if (user) {
+            router.replace('/calendar');
+        } else {
+            router.replace('/login');
+        }
+    }, [router, user])
 
     return <LoadingSpinner />;
 }
