@@ -43,9 +43,7 @@ const login = function (req, res) {
                     issuer: 'root'
                 });
 
-                res.cookie("token", token, {
-                    httpOnly: true
-                });
+                res.cookie("token", token);
                 console.log(token);
 
                 return res.status(StatusCodes.OK).json(results);

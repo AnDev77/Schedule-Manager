@@ -10,7 +10,7 @@ const addNotification = (req, res) => {
     const { user_id, schedule_id, notify_time } = req.body;
 
     // 사용자가 입력한 notify_time을 KST로 변환
-    const notifyTimeKST = moment.tz(notify_time, "Asia/Seoul").format();
+    const notifyTimeKST = moment.tz(notify_time, "Asia/Seoul").format('YYYY-MM-DD HH:mm:ss');
 
     let query = `INSERT INTO notifications (user_id, schedule_id, notify_time) VALUES(?, ?, ?)`;
     let values = [user_id, schedule_id, notifyTimeKST];
@@ -22,7 +22,7 @@ const addNotification = (req, res) => {
         }
         res.status(StatusCodes.CREATED).json(rows);
     });
-} // 알림 추가
+}; // 알림 추가
 
 const getNotifications = (req, res) => {
     const { user_id } = req.body;
@@ -36,11 +36,10 @@ const getNotifications = (req, res) => {
         }
         res.status(StatusCodes.OK).json(rows);
     });
-} // 알림 조회
+}; // 알림 조회
 
 const updateNotification = (req, res) => {
-    const { id } = req.body;
-    const { notify_time } = req.body;
+    const { id, notify_time } = req.body;
 
     let query = `UPDATE notifications SET notify_time = ? WHERE id = ?`;
     
@@ -54,7 +53,7 @@ const updateNotification = (req, res) => {
         }
         res.status(StatusCodes.OK).json(rows);
     });
-} // 알림 수정
+}; // 알림 수정
 
 const deleteNotification = (req, res) => {
     const { id } = req.body;
@@ -71,7 +70,7 @@ const deleteNotification = (req, res) => {
         }
         res.status(StatusCodes.OK).json(rows);
     });
-} // 알림 삭제
+}; // 알림 삭제
 
 cron.schedule('* * * * *', () => {
     console.log("돌아가는 중");
@@ -90,6 +89,11 @@ cron.schedule('* * * * *', () => {
             return;
         }
 
+        if (rows.length === 0) {
+            console.log("전송할 알림이 없습니다.");
+            return; // 전송할 알림이 없는 경우 종료
+        }
+
         rows.forEach(notification => {
             const mailOptions = {
                 from: process.env.SENDER,
@@ -104,6 +108,16 @@ cron.schedule('* * * * *', () => {
                     console.log(error);
                 } else {
                     console.log(`Email sent: ${info.response}`);
+                    
+                    // 이메일 전송 후 알림을 삭제
+                    const deleteQuery = `DELETE FROM notifications WHERE id = ?`;
+                    conn.query(deleteQuery, [notification.id], (deleteErr) => {
+                        if (deleteErr) {
+                            console.log(deleteErr);
+                        } else {
+                            console.log(`Notification with id ${notification.id} deleted.`);
+                        }
+                    });
                 }
             });
         });
