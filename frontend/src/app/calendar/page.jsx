@@ -6,12 +6,21 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/data/use-user';
 import { useSchedule } from '@/data/use-schedule';
+import { useState, useEffect } from 'react';
 
 const CalendarMain = () => {
-    // TODO: 캘린더 페이지 구현
+    const [scheduleParams, setScheduleParams] = useState(null);
     const router = useRouter();
     const { id: userId } = useUser();
-    const { data: schedules } = useSchedule({ startDate: new Date().toISOString(), endDate: new Date().toISOString(), userId });
+    const { data: schedules } = useSchedule(scheduleParams);
+
+    useEffect(() => {
+        if (userId) {
+            setScheduleParams((prev) => {
+                return { ...prev, userId }
+            });
+        }
+    }, [userId]);
 
     return (
         <FullCalendar
@@ -30,6 +39,11 @@ const CalendarMain = () => {
             }}
             moreLinkText={(n) => `+${n} 더보기`}
             dateClick={(arg) => { router.push(`/calendar/${arg.dateStr}`) }}
+            datesSet={(dateInfo) => {
+                setScheduleParams((prev) => {
+                    return { ...prev, startDate: dateInfo.startStr, endDate: dateInfo.endStr }
+                });
+            }}
             dayMaxEvents
             nowIndicator
         />
