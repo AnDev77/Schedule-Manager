@@ -39,7 +39,7 @@ CREATE TABLE schedules (
 
 	repet_type INT NOT NULL,  --0 : non-repetition, 1 : weekly, 2 : montly
 
-	FOREIGN KEY (user_email) REFERENCES users(email) ON DELETE CASCADE,
+	FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
 
 	FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE CASCADE,
     
