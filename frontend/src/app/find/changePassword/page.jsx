@@ -6,22 +6,45 @@ import Title from '@/components/common/title';
 import styles from '@/styles/pages/login.module.css';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import { useUser } from '@/data/use-user';
 
 const ChangePassword = () => {
     // TODO: 유저 설정 페이지(비밀번호 변경) 구현
     const router = useRouter();
+    const user = useUser();
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm();
         
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         if(data.password !== data.passwordCheck) {
             alert('비밀번호를 확인해주세요.');
             return;
         }
-        alert(JSON.stringify(data, null, 4));
+
+        const email = user?.email ? user.email : sessionStorage.getItem('find_email');
+        
+        const resp = await fetch('http://localhost:3000/users/reset', {
+            mode: 'cors',
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email,
+                password: data.password,
+            }),
+            credentials: 'include',
+        });
+
+        if (resp.status != 200) {
+            alert('오류가 발생하였습니다.');
+            return;
+        }
+        
+        sessionStorage.removeItem('find_email');
         router.push('/login');
     }
 
