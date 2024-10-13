@@ -4,23 +4,20 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { useRouter } from 'next/navigation';
-
-const events = [
-    { id: 1, title: 'Meeting1', start: new Date(), allDay: true, },
-    { id: 2, title: 'Meeting2', start: new Date(), allDay: true, },
-    { id: 3, title: 'Meeting3', start: new Date(), allDay: true, },
-    { id: 4, title: 'Meeting4', start: new Date(), allDay: true, },
-]
+import { useUser } from '@/data/use-user';
+import { useSchedule } from '@/data/use-schedule';
 
 const CalendarMain = () => {
     // TODO: 캘린더 페이지 구현
     const router = useRouter();
+    const { id: userId } = useUser();
+    const { data: schedules } = useSchedule({ startDate: new Date().toISOString(), endDate: new Date().toISOString(), userId });
 
     return (
         <FullCalendar
             plugins={[ dayGridPlugin, interactionPlugin ]}
             initialView='dayGridMonth'
-            events={events}
+            events={schedules}
             height={'calc(100vh - 2rem)'}
             locale={'ko'}
             buttonText={{
