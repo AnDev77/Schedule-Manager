@@ -4,7 +4,8 @@ const {
         getSchedules,
         addSchedule,
         deletSchedule, 
-        updateSchedule
+        updateSchedule,
+        shareSchedule
         } = require('../controller/ScheduleController')
 
 
@@ -16,6 +17,8 @@ router.post('/', addSchedule);
 
 router.delete('/:id', deletSchedule); 
 
-router.put('/:id', updateSchedule)
+router.put('/:id', updateSchedule);
+
+router.post('/share/:id', shareSchedule);
 
 module.exports = router
