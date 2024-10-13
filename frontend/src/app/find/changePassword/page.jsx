@@ -25,6 +25,11 @@ const ChangePassword = () => {
         }
 
         const email = user?.email ? user.email : sessionStorage.getItem('find_email');
+
+        if (!email) {
+            alert('오류가 발생하였습니다.');
+            return;
+        }
         
         const resp = await fetch('http://localhost:3000/users/reset', {
             mode: 'cors',
