@@ -16,7 +16,7 @@ const Find = () => {
     } = useForm();
         
     const onSubmit = async (data) => {
-        const response = await fetch('http://localhost:3000/users/idcheck', {
+        const resp = await fetch('http://localhost:3000/users/idcheck', {
             mode: 'cors',
             method: 'POST',
             headers: {
@@ -35,6 +35,8 @@ const Find = () => {
             alert('존재하지 않는 계정입니다.');
             return;
         }
+
+        sessionStorage.setItem('find_email', data.email);
         
         router.push('/find/changePassword');
     }
