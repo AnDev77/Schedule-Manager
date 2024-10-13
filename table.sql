@@ -33,15 +33,13 @@ CREATE TABLE schedules (
     
 	end_date DATE NOT NULL,
     
-    start_time TIME,
+    	start_time TIME,
 	
-    end_time  TIME,
+    	end_time  TIME,
 
 	repet_type INT NOT NULL,  --0 : non-repetition, 1 : weekly, 2 : montly
 
 	FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-
-	FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE CASCADE,
     
 );
 
