@@ -30,8 +30,30 @@ const CalenderDetail = () => {
     const day = params.id.split('-');
     const viewDay = `${day[0]}년 ${day[1]}월 ${day[2]}일`;
 
-    const handlePlusList = () => {
+    const handlePlusList = async () => {
         // TODO: 일정 추가 구현 (request and mutate useSchedule)
+        const resp = await fetch(`http://localhost:3000/schedules`, {
+            mode: 'cors',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                user_id: userId,
+                title: '새 일정',
+                start_date: params.id,
+                end_date: params.id,
+                repet_type: 0
+            }),
+            credentials: 'include',
+        });
+
+        if (resp.status != 201) {
+            alert('오류가 발생했습니다.');
+            return;
+        }
+
+        mutate({ ...data });
     }
 
     const onSubmit = async (data) => {
@@ -51,7 +73,7 @@ const CalenderDetail = () => {
             alert('오류가 발생했습니다.');
             return;
         }
-        
+
         mutate({ ...data });
     }
 
