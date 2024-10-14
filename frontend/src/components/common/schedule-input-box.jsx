@@ -15,7 +15,7 @@ const ScheduleInputBox = ({
         <div className={styles.div}> 
             <RemoveList className={styles.list} onClick={onRemove}/>
             <form className={styles.inputDiv}>
-                <input type="number" name="id" value={scheduleId} hidden />
+                <input type="number" name="id" defaultValue={scheduleId} hidden />
                 <input
                     type='text'
                     placeholder='일정'
