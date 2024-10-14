@@ -10,7 +10,7 @@ export default function Home() {
     const user = useUser();
     
     useEffect(() => {
-        if (user) {
+        if (user.id) {
             router.replace('/calendar');
         } else {
             router.replace('/login');

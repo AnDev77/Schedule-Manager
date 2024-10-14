@@ -1,3 +1,4 @@
+import { useState, useEffect, useMemo } from 'react';
 import { jwtDecode } from 'jwt-decode';
 
 const getJwt = () => {
@@ -6,10 +7,16 @@ const getJwt = () => {
 }
 
 const useUser = () => {
-    const jwt = getJwt();
-    if (!jwt) return;
-    const { id, email } = jwtDecode(jwt);
-    return { id, email };
+    const [user, setUser] = useState({ id: null, email: null });
+
+    useEffect(() => {
+        const jwt = getJwt();
+        if (!jwt) return;
+        const { id, email } = jwtDecode(jwt);
+        setUser({ id, email });
+    }, []);
+
+    return user;
 }
 
 export { useUser };
