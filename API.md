@@ -123,6 +123,22 @@
 ]
 ```
 
+### 알람 수정
+**Endpoint**: PUT/notifications  
+**Request**:
+```json
+{
+    "id": "id", // 숫자, 그리고 notifications의 id를 의미
+    "notify_time": "notify_time" 
+}
+```
+**Response**:
+```json
+{
+    "message" : "알람이 수정되었습니다."
+}
+```
+
 ### 알람 삭제
 **Endpoint**: DELETE/notifications  
 **Request**:
