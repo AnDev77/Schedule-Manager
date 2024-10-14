@@ -12,7 +12,7 @@ const CalendarMain = () => {
     const [scheduleParams, setScheduleParams] = useState(null);
     const router = useRouter();
     const { id: userId } = useUser();
-    const { data: schedules } = useSchedule(scheduleParams);
+    const { data } = useSchedule(scheduleParams);
 
     useEffect(() => {
         if (userId) {
@@ -26,7 +26,13 @@ const CalendarMain = () => {
         <FullCalendar
             plugins={[ dayGridPlugin, interactionPlugin ]}
             initialView='dayGridMonth'
-            events={schedules}
+            events={
+                data?.schedules?.map(s => ({
+                    title: s.title,
+                    start: s.start_date,
+                    end: s.end_date
+                }))
+            }
             height={'calc(100vh - 2rem)'}
             locale={'ko'}
             buttonText={{
@@ -41,7 +47,11 @@ const CalendarMain = () => {
             dateClick={(arg) => { router.push(`/calendar/${arg.dateStr}`) }}
             datesSet={(dateInfo) => {
                 setScheduleParams((prev) => {
-                    return { ...prev, startDate: dateInfo.startStr, endDate: dateInfo.endStr }
+                    return {
+                        ...prev,
+                        startDate: dateInfo.startStr.split('T')[0],
+                        endDate: dateInfo.endStr.split('T')[0]
+                    }
                 });
             }}
             dayMaxEvents
