@@ -77,8 +77,19 @@ const CalenderDetail = () => {
         mutate({ ...data });
     }
 
-    const handleRemove = (id) => {
-        // TODO: 일정 삭제 구현
+    const handleRemove = async (id) => {
+        const resp = await fetch(`http://localhost:3000/schedules/${id}`, {
+            mode: 'cors',
+            method: 'DELETE',
+            credentials: 'include',
+        });
+
+        if (resp.status != 200) {
+            alert('오류가 발생했습니다.');
+            return;
+        }
+
+        mutate({ ...data });
     }
 
     const handleUserPlus = () => {
