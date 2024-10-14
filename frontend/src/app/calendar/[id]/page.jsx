@@ -16,7 +16,7 @@ const CalenderDetail = () => {
         startDate: params.id,
         endDate: params.id
     });
-    const { id: userId } = useUser();
+    const { id: userId, email: userEmail } = useUser();
     const { data, mutate } = useSchedule(scheduleParams);
 
     useEffect(() => {
@@ -92,8 +92,32 @@ const CalenderDetail = () => {
         mutate({ ...data });
     }
 
-    const handleUserPlus = () => {
-        // TODO: 인원 추가 구현
+    const handleUserPlus = async (id, title) => {
+        const invitedEmail = prompt('초대할 이메일을 입력해주세요.');
+        if (!invitedEmail) {
+            alert('취소되었습니다.');
+            return;
+        }
+        const resp = await fetch(`http://localhost:3000/schedules/share/${id}`, {
+            mode: 'cors',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                user_email: userEmail,
+                invited_email: invitedEmail,
+                schedule_title: title,
+            }),
+            credentials: 'include',
+        });
+
+        if (resp.status != 201) {
+            alert('오류가 발생했습니다.')
+            return;
+        }
+
+        alert(`${invitedEmail}님의 초대가 완료되었습니다.`);
     }
 
     return (
@@ -114,7 +138,7 @@ const CalenderDetail = () => {
                             scheduleTitle = {e.title}
                             onSubmit={onSubmit}
                             onRemove = {() => handleRemove(e.id)}
-                            onUserPlusClick = {() => handleUserPlus(e.id)}
+                            onUserPlusClick = {() => handleUserPlus(e.id, e.title)}
                         />
                     ))}
                 </div>
