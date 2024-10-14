@@ -48,6 +48,10 @@ const CalenderDetail = () => {
         setEvents(newEvents);
     }
 
+    const handleAlert = () => {
+        router.push('/alert');
+    }
+
     const handleUserPlus = () => {
         alert("인원추가")
     }
@@ -71,6 +75,7 @@ const CalenderDetail = () => {
                             value = {e.title}
                             onChange = {event => handleInputChange(event, e.id)}
                             onRemove = {() => handleRemove(e.id)}
+                            onAlertClick={() => handleAlert(e.id)}
                             onUserPlusClick = {() => handleUserPlus(e.id)}
                         />
                     ))}
