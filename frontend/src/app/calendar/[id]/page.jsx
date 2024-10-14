@@ -17,7 +17,7 @@ const CalenderDetail = () => {
         endDate: params.id
     });
     const { id: userId } = useUser();
-    const { data, isLoading } = useSchedule(scheduleParams);
+    const { data, mutate } = useSchedule(scheduleParams);
 
     useEffect(() => {
         if (userId) {
@@ -34,8 +34,25 @@ const CalenderDetail = () => {
         // TODO: 일정 추가 구현 (request and mutate useSchedule)
     }
 
-    const handleSubmit = (event, id) => {
-        // TODO: 일정 변경 구현 (form onBlur request)
+    const onSubmit = async (data) => {
+        const resp = await fetch(`http://localhost:3000/schedules/${data.id}`, {
+            mode: 'cors',
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                schedule_title: data.title,
+            }),
+            credentials: 'include',
+        });
+
+        if (resp.status != 200) {
+            alert('오류가 발생했습니다.');
+            return;
+        }
+        
+        mutate({ ...data });
     }
 
     const handleRemove = (id) => {
@@ -62,6 +79,7 @@ const CalenderDetail = () => {
                             key = {e.id}
                             scheduleId={e.id}
                             scheduleTitle = {e.title}
+                            onSubmit={onSubmit}
                             onRemove = {() => handleRemove(e.id)}
                             onUserPlusClick = {() => handleUserPlus(e.id)}
                         />
