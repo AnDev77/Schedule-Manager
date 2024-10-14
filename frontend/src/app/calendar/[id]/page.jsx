@@ -34,7 +34,7 @@ const CalenderDetail = () => {
         // TODO: 일정 추가 구현 (request and mutate useSchedule)
     }
 
-    const handleInputChange = (event, id) => {
+    const handleSubmit = (event, id) => {
         // TODO: 일정 변경 구현 (form onBlur request)
     }
 
@@ -60,8 +60,8 @@ const CalenderDetail = () => {
                     {data?.schedules?.map((e) => (
                         <ScheduleInputBox
                             key = {e.id}
-                            value = {e.title}
-                            onChange = {event => handleInputChange(event, e.id)}
+                            scheduleId={e.id}
+                            scheduleTitle = {e.title}
                             onRemove = {() => handleRemove(e.id)}
                             onUserPlusClick = {() => handleUserPlus(e.id)}
                         />
