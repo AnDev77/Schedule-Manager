@@ -4,38 +4,46 @@ import ScheduleInputBox from '@/components/common/schedule-input-box';
 import styles from '@/styles/pages/id.module.css';
 import PlusCircle from '@heroicons/react/24/solid/PlusCircleIcon';
 import Link from 'next/link';
-import { useRouter, useParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { useSchedule } from '@/data/use-schedule';
+import { useUser } from '@/data/use-user';
 
 const CalenderDetail = () => {
     const params = useParams();
+    const [scheduleParams, setScheduleParams] = useState({
+        userId: null,
+        startDate: params.id,
+        endDate: params.id
+    });
+    const { id: userId } = useUser();
+    const { data, isLoading } = useSchedule(scheduleParams);
+
+    useEffect(() => {
+        if (userId) {
+            setScheduleParams((prev) => {
+                return { ...prev, userId }
+            });
+        }
+    }, [userId]);
     
     const day = params.id.split('-');
     const viewDay = `${day[0]}년 ${day[1]}월 ${day[2]}일`;
 
     const handlePlusList = () => {
-        const newEvents = {
-            id: id,
-            title: '',
-            start:  new Date(),
-            allDay: true,
-        };
+        // TODO: 일정 추가 구현 (request and mutate useSchedule)
     }
 
     const handleInputChange = (event, id) => {
-        const newEvents = events.map(e => {
-            return e.id === id ? {...e, title: event.target.value} : e
-        });
-        setEvents(newEvents);
+        // TODO: 일정 변경 구현 (form onBlur request)
     }
 
     const handleRemove = (id) => {
-        const newEvents = events.filter(e => e.id !== id);
-        setEvents(newEvents);
+        // TODO: 일정 삭제 구현
     }
 
     const handleUserPlus = () => {
-        alert("인원추가")
+        // TODO: 인원 추가 구현
     }
 
     return (
@@ -49,7 +57,7 @@ const CalenderDetail = () => {
             <div className={styles.mainDiv}>
                 <PlusCircle className={styles.icons} onClick={handlePlusList}/>
                 <div>
-                    {events.map((e) => (
+                    {data?.schedules?.map((e) => (
                         <ScheduleInputBox
                             key = {e.id}
                             value = {e.title}
