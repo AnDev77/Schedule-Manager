@@ -1,0 +1,11 @@
+a[aria-label='일요일'] {
+    color: red;
+}
+
+a[aria-label='토요일'] {
+    color: blue;
+}
+
+.fc-daygrid-day-frame {
+    cursor: pointer;
+}
