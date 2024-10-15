@@ -5,32 +5,38 @@ import UserPlus from '@heroicons/react/24/solid/UserPlusIcon';
 import Bell from '@heroicons/react/24/solid/BellIcon';
 
 
+import { useForm } from 'react-hook-form';
+
 const ScheduleInputBox = ({
-    type = 'text',
-    placeholder = '',
-    value,
-    onChange,
-    className = '',
-    onRemove, 
-    onAlertClick,
+    scheduleId,
+    scheduleTitle,
+    onRemove,
     onUserPlusClick,
+    onSubmit,
     ...props
 }) => {
+    const {
+        register,
+        handleSubmit,
+    } = useForm();
+
     return (
         <div className={styles.div}> 
             <RemoveList className={styles.list} onClick={onRemove}/>
-            <div className={styles.inputDiv}>   
+            <form className={styles.inputDiv}>
+                <input {...register('id')} defaultValue={scheduleId} hidden />
                 <input
-                    type={type}
-                    placeholder={placeholder}
-                    value={value}
-                    onChange={onChange}
-                    className={`${styles.scheduleInputBox} ${className}`}
+                    {...register('title')}
+                    type='text'
+                    placeholder='일정'
+                    defaultValue={scheduleTitle}
+                    onBlur={handleSubmit(onSubmit)}
+                    className={styles.scheduleInputBox}
                     {...props}
                 />
                 <Bell className={styles.icons} onClick={onAlertClick}/>
                 <UserPlus className={styles.icons} onClick={onUserPlusClick}/>
-            </div>
+            </form>
         </div>
     );
 };

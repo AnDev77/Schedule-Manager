@@ -16,7 +16,10 @@ const join = function (req, res) {
                 console.log(err)
                 return res.status(StatusCodes.BAD_REQUEST).end();
             }
-            return res.status(StatusCodes.CREATED).json(results);
+            return res.status(StatusCodes.CREATED).json({
+                message: "회원가입이 완료되었습니다."
+            }
+            );
         }
     );
 };
@@ -46,7 +49,9 @@ const login = function (req, res) {
                 res.cookie("token", token);
                 console.log(token);
 
-                return res.status(StatusCodes.OK).json(results);
+                return res.status(StatusCodes.OK).json({
+                    message: "로그인 성공"
+                });
             } else {
                 res.status(StatusCodes.UNAUTHORIZED).json({
                     message: "로그인 실패"
@@ -69,7 +74,7 @@ const idCheck = function (req, res) {
             const user = results[0];
             if (user) {
                 return res.status(StatusCodes.OK).json({
-                    email: email
+                    message: "id가 확인되었습니다."
                 });
             } else {
                 return res.status(StatusCodes.UNAUTHORIZED).end();
@@ -94,7 +99,9 @@ const passwordReset = function (req, res) {
             } else if (results.affectedRows === 0) { // email, password가 없는 경우
                 return res.status(StatusCodes.BAD_REQUEST).end();
             } else {
-                return res.status(StatusCodes.OK).json(results);
+                return res.status(StatusCodes.OK).json({
+                    message: "비밀번호가 변경되었습니다."
+                });
             }
         }
     )
@@ -112,7 +119,9 @@ const userDelete = function (req, res) {
             } else if (results.affectedRows == 0) {
                 return res.status(400).end();
             } else {
-                res.status(200).json(results)
+                res.status(200).json({
+                    message: "회원탈퇴 처리 되었습니다."
+                })
             }
         }
     );

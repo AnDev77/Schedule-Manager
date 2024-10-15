@@ -20,7 +20,9 @@ const addNotification = (req, res) => {
             console.log(err);
             return res.status(StatusCodes.BAD_REQUEST).json(err);
         }
-        res.status(StatusCodes.CREATED).json(rows);
+        res.status(StatusCodes.CREATED).json({
+            message: "알람이 추가되었습니다."
+        });
     });
 }; // 알림 추가
 
@@ -51,7 +53,9 @@ const updateNotification = (req, res) => {
         if (rows.affectedRows === 0) {
             return res.status(StatusCodes.NOT_FOUND).json({ message: '알림이 없습니다.' });
         }
-        res.status(StatusCodes.OK).json(rows);
+        res.status(StatusCodes.OK).json({
+            message: "알람이 수정되었습니다."
+        });
     });
 }; // 알림 수정
 
@@ -68,7 +72,9 @@ const deleteNotification = (req, res) => {
         if (rows.affectedRows === 0) {
             return res.status(StatusCodes.NOT_FOUND).json({ message: '알림이 없습니다.' });
         }
-        res.status(StatusCodes.OK).json(rows);
+        res.status(StatusCodes.OK).json({
+            message: "알람이 삭제되었습니다."
+        });
     });
 }; // 알림 삭제
 

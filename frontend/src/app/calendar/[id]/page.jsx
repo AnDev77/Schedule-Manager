@@ -3,80 +3,143 @@
 import ScheduleInputBox from '@/components/common/schedule-input-box';
 import styles from '@/styles/pages/id.module.css';
 import PlusCircle from '@heroicons/react/24/solid/PlusCircleIcon';
-import { useRouter, useParams } from 'next/navigation';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { useSchedule } from '@/data/use-schedule';
+import { useUser } from '@/data/use-user';
 
 const CalenderDetail = () => {
-    // TODO: 일정 보기/수정/삭제 페이지 구현
-    const router = useRouter();
     const params = useParams();
-    const [id, setId] = useState(5);
-    const [events, setEvents] = useState([
-        { id: 1, title: 'Meeting1', start: new Date(), allDay: true, },
-        { id: 2, title: 'Meeting2', start: new Date(), allDay: true, },
-        { id: 3, title: 'Meeting3', start: new Date(), allDay: true, },
-        { id: 4, title: 'Meeting4', start: new Date(), allDay: true, },
-    ]);
+    const [scheduleParams, setScheduleParams] = useState({
+        userId: null,
+        startDate: params.id,
+        endDate: params.id
+    });
+    const { id: userId, email: userEmail } = useUser();
+    const { data, mutate } = useSchedule(scheduleParams);
+
+    useEffect(() => {
+        if (userId) {
+            setScheduleParams((prev) => {
+                return { ...prev, userId }
+            });
+        }
+    }, [userId]);
     
     const day = params.id.split('-');
     const viewDay = `${day[0]}년 ${day[1]}월 ${day[2]}일`;
 
-    const handleClick = (e) => {
-        router.push('/calendar');
-    }
-
-    const handlePlusList = () => {
-        const newEvents = {
-            id: id,
-            title: '',
-            start:  new Date(),
-            allDay: true,
-        };
-        setId(id+1);
-        setEvents([...events, newEvents])
-    }
-
-    const handleInputChange = (event, id) => {
-        const newEvents = events.map(e => {
-            return e.id === id ? {...e, title: event.target.value} : e
+    const handlePlusList = async () => {
+        // TODO: 일정 추가 구현 (request and mutate useSchedule)
+        const resp = await fetch(`http://localhost:3000/schedules`, {
+            mode: 'cors',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                user_id: userId,
+                title: '새 일정',
+                start_date: params.id,
+                end_date: params.id,
+                repet_type: 0
+            }),
+            credentials: 'include',
         });
-        setEvents(newEvents);
+
+        if (resp.status != 201) {
+            alert('오류가 발생했습니다.');
+            return;
+        }
+
+        mutate({ ...data });
     }
 
-    const handleRemove = (id) => {
-        const newEvents = events.filter(e => e.id !== id);
-        setEvents(newEvents);
+    const onSubmit = async (data) => {
+        const resp = await fetch(`http://localhost:3000/schedules/${data.id}`, {
+            mode: 'cors',
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                schedule_title: data.title,
+            }),
+            credentials: 'include',
+        });
+
+        if (resp.status != 200) {
+            alert('오류가 발생했습니다.');
+            return;
+        }
+
+        mutate({ ...data });
     }
 
-    const handleAlert = () => {
-        router.push('/alert');
+    const handleRemove = async (id) => {
+        const resp = await fetch(`http://localhost:3000/schedules/${id}`, {
+            mode: 'cors',
+            method: 'DELETE',
+            credentials: 'include',
+        });
+
+        if (resp.status != 200) {
+            alert('오류가 발생했습니다.');
+            return;
+        }
+
+        mutate({ ...data });
     }
 
-    const handleUserPlus = () => {
-        alert("인원추가")
-    }
+    const handleUserPlus = async (id, title) => {
+        const invitedEmail = prompt('초대할 이메일을 입력해주세요.');
+        if (!invitedEmail) {
+            alert('취소되었습니다.');
+            return;
+        }
+        const resp = await fetch(`http://localhost:3000/schedules/share/${id}`, {
+            mode: 'cors',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                user_email: userEmail,
+                invited_email: invitedEmail,
+                schedule_title: title,
+            }),
+            credentials: 'include',
+        });
 
-    useEffect(() => {
-        console.log(events);
-    }, [events])
+        if (resp.status != 201) {
+            alert('오류가 발생했습니다.')
+            return;
+        }
+
+        alert(`${invitedEmail}님의 초대가 완료되었습니다.`);
+    }
 
     return (
         <>
             <div className={styles.topDiv}>
                 <h2>{viewDay}</h2>
-                <button className={styles.button} onClick={handleClick}>돌아가기</button>
+                <Link href='/calendar'>
+                    <button className={styles.button}>돌아가기</button>
+                </Link>
             </div>
             <div className={styles.mainDiv}>
                 <PlusCircle className={styles.icons} onClick={handlePlusList}/>
                 <div>
-                    {events.map((e) => (
+                    {data?.schedules?.map((e) => (
                         <ScheduleInputBox
                             key = {e.id}
-                            value = {e.title}
-                            onChange = {event => handleInputChange(event, e.id)}
+                            scheduleId={e.id}
+                            scheduleTitle = {e.title}
+                            onSubmit={onSubmit}
                             onRemove = {() => handleRemove(e.id)}
                             onAlertClick={() => handleAlert(e.id)}
-                            onUserPlusClick = {() => handleUserPlus(e.id)}
+                            onUserPlusClick = {() => handleUserPlus(e.id, e.title)}
                         />
                     ))}
                 </div>
