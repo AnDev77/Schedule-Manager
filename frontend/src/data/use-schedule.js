@@ -23,12 +23,13 @@ const fetcher = async ([url, startDate, endDate, userId]) => {
 const useSchedule = (req) => {
     const { startDate, endDate, userId } = req || {};
     const shouldFetch = startDate && userId;
-    const { data, error, isLoading } = useSWR([shouldFetch ? 'http://localhost:3000/schedules' : null, startDate, endDate, userId], fetcher);
+    const { data, error, isLoading, mutate } = useSWR([shouldFetch ? 'http://localhost:3000/schedules' : null, startDate, endDate, userId], fetcher);
 
     return {
         data,
         error,
-        isLoading
+        isLoading,
+        mutate
     };
 }
 

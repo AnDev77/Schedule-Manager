@@ -3,30 +3,37 @@ import styles from '@/styles/common/schedule-input-box.module.css';
 import RemoveList from '@heroicons/react/24/solid/MinusCircleIcon';
 import UserPlus from '@heroicons/react/24/solid/UserPlusIcon';
 
+import { useForm } from 'react-hook-form';
+
 const ScheduleInputBox = ({
-    type = 'text',
-    placeholder = '',
-    value,
-    onChange,
-    className = '',
-    onRemove, 
+    scheduleId,
+    scheduleTitle,
+    onRemove,
     onUserPlusClick,
+    onSubmit,
     ...props
 }) => {
+    const {
+        register,
+        handleSubmit,
+    } = useForm();
+
     return (
         <div className={styles.div}> 
             <RemoveList className={styles.list} onClick={onRemove}/>
-            <div className={styles.inputDiv}>   
+            <form className={styles.inputDiv}>
+                <input {...register('id')} defaultValue={scheduleId} hidden />
                 <input
-                    type={type}
-                    placeholder={placeholder}
-                    value={value}
-                    onChange={onChange}
-                    className={`${styles.scheduleInputBox} ${className}`}
+                    {...register('title')}
+                    type='text'
+                    placeholder='일정'
+                    defaultValue={scheduleTitle}
+                    onBlur={handleSubmit(onSubmit)}
+                    className={styles.scheduleInputBox}
                     {...props}
                 />
                 <UserPlus className={styles.icons} onClick={onUserPlusClick}/>
-            </div>
+            </form>
         </div>
     );
 };
