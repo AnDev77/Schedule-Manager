@@ -1,0 +1,71 @@
+.div {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 0.5rem;
+}
+
+.inputDiv {
+    width: 97.5%;
+    border-bottom: 0.1875rem solid var(--color-text);
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.list {
+    height: 2.5rem;
+    color: var(--color-neutral);
+    cursor: pointer;
+    transition: color ease 0.2s;
+}
+
+.list:hover {
+    color: black;
+}
+
+.schedule {
+    width: 94.5%;
+    margin: 0;
+    padding: 0.75rem;
+    font-size: 1.5rem;
+    border: none;
+    font-family: var(--font-paperlogy);
+    font-weight: 500;
+}
+
+.dropBox {
+    font-family: var(--font-paperlogy);
+    font-size: 1.045rem;
+    font-weight: 500;
+    padding: 0.4em 0.1em;
+    margin-right: 0.3rem;
+}
+
+.button {
+    cursor: pointer;
+    background-color: #2c3e50;
+    border-color: #2c3e50;
+    color: #fff;
+    border: 1px solid transparent;
+    border-radius: 0.25em;
+    display: inline-block;
+    font-size: 1.045em;
+    font-weight: 400;
+    line-height: 1.5;
+    padding: 0.4em 0.65em;
+    text-align: center;
+    user-select: none;
+    vertical-align: middle;
+    font-family: var(--font-paperlogy);
+}
+
+.button:hover {
+    background-color: #1e2b37;
+    border-color: #1e2b37;
+}
+
+.button:focus {
+    box-shadow: rgba(76, 91, 106, 0.5) 0px 0px 0px 0.2rem;
+}
