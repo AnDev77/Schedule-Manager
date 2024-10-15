@@ -153,3 +153,78 @@
     "message" : "알람이 삭제되었습니다."
 }
 ```
+
+<br></br>
+## Schedule
+
+### 일정 추가
+**Endpoint**: POST/schedules  
+**Request**:
+```json
+{
+    "user_id": 1,
+    "title": "일정 제목",
+    "start_date" : "2024-09-29",
+    "end_date" : "2024-10-01",
+    "repet_type"  : 1 // 0 : non-repetition, 1 : weelky, 2 : monthly
+}
+```
+**Response**: HTTP-status-code 201
+
+### 일정 조회
+**Endpoint**: GET/schedules?calStartDate=2024-10-01&calEndDate=2024-10-01&user_id=1
+
+**Request**:
+
+**Response**: HTTP-status-code 200
+```json
+{
+    "schedules"  : [{   "id" : 1
+                        "title": "일정 제목",
+                        "start_date" : "2024-10-01",
+                        "end_date" : "2024-10-01",
+                        "repet_type"  : 1 
+                    },
+                    {
+                         "id" : 2
+                        "title": "일정 제목",
+                        "start_date" : "2024-10-12",
+                        "end_date" : "2024-10-19",
+                        "repet_type"  : 0
+                    
+                    }]
+}
+```
+
+### 일정 삭제
+**Endpoint**: DELETE/schedules/:id  
+
+**Request**:
+
+**Response**: HTTP-status-code 200
+
+
+### 일정 수정
+**Endpoint**: PUT/schedules  
+
+**Request**:
+```json
+{
+    "schedule_title": "변경할 일정 제목",   
+}
+```
+**Response**: HTTP-status-code 200
+
+
+### 일정 공유
+**Endpoint**: POST/schedules/share  
+
+**Request**:
+```json
+{
+    "user_email": "user@mail.com"
+    "invited_email": "invited@mail.com",
+    "schedule_title" : "공유된 일정 제목",
+}
+```
+**Response**: HTTP-status-code 201
