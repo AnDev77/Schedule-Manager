@@ -4,7 +4,7 @@ import AlertListBox from '@/components/common/alert-list-box';
 import styles from '@/styles/pages/alert.module.css';
 import { useState, useEffect } from 'react';
 
-const CalenderDetail = () => {
+const Alert = () => {
     // TODO: 일정 보기/수정/삭제 페이지 구현
     const [events, setEvents] = useState([
         { id: 1, title: 'Meeting1', start: new Date(), allDay: true, },
@@ -44,4 +44,4 @@ const CalenderDetail = () => {
     )
 }
 
-export default CalenderDetail;
+export default Alert;
