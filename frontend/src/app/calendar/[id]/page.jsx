@@ -120,6 +120,49 @@ const CalenderDetail = () => {
         alert(`${invitedEmail}님의 초대가 완료되었습니다.`);
     }
 
+    const handleAlert = async (id) => {
+        const notifyDate = new Date(params.id);
+        const today = new Date();
+
+        if(
+            notifyDate.getFullYear() === today.getFullYear() && 
+           notifyDate.getMonth() === today.getMonth() &&
+           notifyDate.getDate() === today.getDate()
+        ) {
+            today.setHours(today.getHours() + 1);
+            notifyDate.setHours(today.getHours(), today.getMinutes(), 0);
+        } else {
+            notifyDate.setHours(0, 0, 0);
+        }
+
+        const time = notifyDate.toLocaleString('en-CA', {
+            timeZone: 'Asia/Seoul',
+            hour12: false,
+        }); 
+        
+        const notifyTime = time.replace(',', '');
+
+        const response = await fetch('http://localhost:3000/notifications', {
+            mode: 'cors',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                user_id: userId,
+                schedule_id: id,
+                notify_time: notifyTime
+            }),
+            credentials: 'include',
+        });
+
+        if(response.status === 201) {
+            alert(`알람이 추가되었습니다. ${notifyTime}`);
+        } else {
+            alert('알람 추가 중 오류가 발생했습니다.');
+        }
+    }
+
     return (
         <>
             <div className={styles.topDiv}>

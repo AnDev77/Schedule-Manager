@@ -4,13 +4,13 @@ import RemoveList from '@heroicons/react/24/solid/MinusCircleIcon';
 import UserPlus from '@heroicons/react/24/solid/UserPlusIcon';
 import Bell from '@heroicons/react/24/solid/BellIcon';
 
-
 import { useForm } from 'react-hook-form';
 
 const ScheduleInputBox = ({
     scheduleId,
     scheduleTitle,
     onRemove,
+    onAlertClick,
     onUserPlusClick,
     onSubmit,
     ...props
