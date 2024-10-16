@@ -104,7 +104,7 @@
 ```
 
 ### 알람 조회
-**Endpoint**: GET/notifications  
+**Endpoint**: POST/notifications/all
 **Request**:
 ```json
 {
@@ -118,7 +118,9 @@
         "id": "id",
         "schedule_id": "schedule_id",
         "user_id": "user_id",
-        "notify_time": "YYYY-MM-DD HH:MM:SS"
+        "notify_time": "YYYY-MM-DD HH:MM:SS",
+        "title": "title_id",
+        "start_date": "YYYY-MM-DD"
     }
 ]
 ```

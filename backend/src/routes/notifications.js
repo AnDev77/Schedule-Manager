@@ -5,7 +5,7 @@ router.use(express.json());
 
 router.post('/', addNotification);
 
-router.get('/', getNotifications);
+router.post('/all', getNotifications);
 
 router.put('/', updateNotification);
 
