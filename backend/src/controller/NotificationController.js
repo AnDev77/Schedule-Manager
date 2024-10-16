@@ -29,7 +29,7 @@ const addNotification = (req, res) => {
 const getNotifications = (req, res) => {
     const { user_id } = req.body;
 
-    let query = `SELECT * FROM notifications WHERE user_id = ?`;
+    let query = `SELECT notifications.*, schedules.title, schedules.start_date FROM notifications LEFT JOIN schedules ON notifications.schedule_id = schedules.id WHERE notifications.user_id = ?`;
     
     conn.query(query, [user_id], (err, rows) => {
         if (err) {
