@@ -28,7 +28,7 @@ CREATE TABLE schedules (
 	user_id INT,
 
 	title VARCHAR(45) NOT NULL,
-
+	
 	start_date DATE NOT NULL,
     
 	end_date DATE NOT NULL,
@@ -58,3 +58,5 @@ CREATE TABLE notifications (
 
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+INSERT INTO schedules (user_id, title, start_date, end_date, repet_type) VALUES(1, "반복되는 스케줄","2024-09-18", "2024-09-20", 1);
