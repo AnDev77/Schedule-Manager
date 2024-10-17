@@ -1,5 +1,11 @@
 # Schedule-Manager
 
+## 실행 방법
+
+```console
+npm run build && npm run start:all
+```
+
 ## 설치 방법
 
 ### 전체 프로젝트 설치
