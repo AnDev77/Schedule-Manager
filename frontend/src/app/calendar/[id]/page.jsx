@@ -112,7 +112,7 @@ const CalenderDetail = () => {
             credentials: 'include',
         });
 
-        if (resp.status != 201) {
+        if (resp.status != 200) {
             alert('오류가 발생했습니다.')
             return;
         }
