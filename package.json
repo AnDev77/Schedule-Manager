@@ -12,6 +12,7 @@
     "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
     "build": "npm run build -w frontend",
     "start": "npm run start -w backend",
+    "start:all": "concurrently \"npm run backend\" \"npm run start -w frontend\"",
     "install:all": "npm install",
     "install:backend": "npm install -w backend",
     "install:frontend": "npm install -w frontend"
